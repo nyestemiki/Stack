@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using UnityEngine;
 
 public class GameManager : Singleton<GameManager>
@@ -7,10 +8,12 @@ public class GameManager : Singleton<GameManager>
     private GameObject platePrefab = null;
     [SerializeField]
     private Canvas ui = null;
+    [SerializeField]
+    private Material[] materials = null;
     
     private GameObject currentPlate = null;
 
-    private float height = 2.0f;
+    private float height = 2.8f;
 
     private bool gameOver = false;
 
@@ -44,9 +47,15 @@ public class GameManager : Singleton<GameManager>
     {
         Vector3 position = new Vector3(0, height, 0);
         GameObject newPlate = Instantiate(platePrefab, position, Quaternion.identity);
-        height += .5f;
+        var x = UnityEngine.Random.Range(2, 15);
+        var y = UnityEngine.Random.Range(.5f, 2);
+        var z = UnityEngine.Random.Range(2, 15);
+        newPlate.transform.localScale = new Vector3(x, y, z);
+        height += y;
+        var materialIndex = UnityEngine.Random.Range(0, materials.Length);
+        newPlate.GetComponent<Renderer>().material = materials[materialIndex];
         currentPlate = newPlate;
-        transform.position += new Vector3(0, .3f, 0);
+        transform.position += new Vector3(0, y, 0);
     }
 
     public void PlateHitGround()
